@@ -1,5 +1,6 @@
 require 'aws-sdk'
-require 'pry'
+#require 'pry'
+
 def s3_get_objects
 
 # Grab AWS access/secret keys from .aws/credentials file
@@ -24,9 +25,11 @@ def s3_get_objects
   end
 
   def gets3buckets
-    resp = @s3.list_buckets.data
-      p resp.buckets.map(&:name)
-      puts 'Specify Bucket: '
+    @s3.list_buckets.each do |response|
+      puts response.buckets.map(&:name)
+    end
+
+      puts "\nSpecify Bucket: "
     @s3bucket = gets.chomp
   end
 
