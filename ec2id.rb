@@ -1,5 +1,4 @@
 require 'aws-sdk'
-require 'pry'
 require 'json'
 
 
