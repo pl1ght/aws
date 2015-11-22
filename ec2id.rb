@@ -8,7 +8,7 @@ require 'json'
 # ssl_verify_peer = not good practice, but on Windows systems its a quick workaround until you can set your environment for a proper CA-bundle
 
 #Aws.config[:ssl_verify_peer] = false
-credentials = Aws::SharedCredentials.new(profile_name: 'imagingdev')
+credentials = Aws::SharedCredentials.new(profile_name: 'default')
 awsregion = "us-east-1"
 client = Aws::EC2::Client.new(credentials: credentials, region: "#{awsregion}")
 
