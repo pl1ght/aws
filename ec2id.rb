@@ -3,16 +3,12 @@ require 'pry'
 require 'json'
 
 
-# Grab AWS access/secret keys from .aws/credentials file
+# Grab AWS access/secret keys/region by profile from .aws/credentials file
 
-# ssl_verify_peer = not good practice, but on Windows systems its a quick workaround until you can set your environment for a proper CA-bundle
-
-#Aws.config[:ssl_verify_peer] = false
 credentials = Aws::SharedCredentials.new(profile_name: 'default')
-awsregion = "us-east-1"
-client = Aws::EC2::Client.new(credentials: credentials, region: "#{awsregion}")
+client = Aws::EC2::Client.new(credentials: credentials)
 
-resp = client.describe_instances          #describe_instance_status
+resp = client.describe_instances
 
 resp.reservations.each do |res|
   res.instances.each do |inst|
