@@ -33,7 +33,12 @@ resp.reservations.each do |res|
   res.instances.each do |inst|
     iid = inst[:instance_id]
     istate = inst[:state].name
-    itag = inst.tags[0].value
+  # Check for instances with no Tags
+    if inst.tags.nil?
+      itag = "!!!NO TAG!!!"
+    else
+      itag = inst.tags[0].value
+    end
     puts "#{itag} | #{iid} | #{istate}"
   end
 end
