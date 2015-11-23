@@ -1,14 +1,17 @@
 require 'aws-sdk'
+#imAws.use_bundled_cert!  #for systems that do not have latest/greatest CA bundle install/configured properly. Uncomment if needing workaround.
 require 'json'
 
 
 # Grab AWS access/secret keys by profile from .aws/credentials file
 
 # Windows
-#credentialfile = 'C:/Users/user/.aws/credentials'
+winuser = ENV['USERPROFILE']
+credentialfile = "#{winuser}/.aws/credentials"
 
 # Linux
-#credentialfile = '~user\.aws\credentials'
+#nixuser = ENV['HOME']
+#credentialfile = "#{nixuser}/.aws/credentials"
 
 list_creds = File.open credentialfile do |file|
   file.find_all { |line| line =~ /\[\w+\]/ }
