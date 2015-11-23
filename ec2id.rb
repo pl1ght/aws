@@ -1,5 +1,5 @@
 require 'aws-sdk'
-#imAws.use_bundled_cert!  #for systems that do not have latest/greatest CA bundle install/configured properly. Uncomment if needing workaround.
+#Aws.use_bundled_cert!  #for systems that do not have latest/greatest CA bundle install/configured properly. Uncomment if needing workaround.
 require 'json'
 
 
