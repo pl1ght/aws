@@ -39,7 +39,7 @@ resp.reservations.each do |res|
     else
       itag = inst.tags[0].value
     end
-    puts "#{itag} | #{iid} | #{istate}"
+    puts "#{itag} - #{iid} - #{istate}"
   end
 end
 
