@@ -1,4 +1,3 @@
-require 'json'
 require 'aws-sdk'
 
 
@@ -10,7 +9,7 @@ credentials = Aws::SharedCredentials.new(profile_name: 'ro')
 
 # Create ELB client
 elb = Aws::ElasticLoadBalancing::Client.new(credentials: credentials, region: 'us-east-1')
-elbname = "Gadfly-mgr"
+elbname = "ELB NAME"
 
 # Describe ELB specified
 elbid = elb.describe_load_balancers(options = {:load_balancer_names => ["#{elbname}"]})
@@ -24,6 +23,8 @@ end
 # Create EC2 Client
 ec2 = Aws::EC2::Client.new(credentials: credentials, region: 'us-east-1')
 
+puts "#{elbname}\n"
+puts "-------------------\n"
 # Grab private IP address from each instance retrieved from ELB in previous block and populate ID/IP for each
 ec2_ids.each do |i|
   aws_id = ec2.describe_instances(options = {:instance_ids => ["#{i}"]})
