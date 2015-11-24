@@ -10,7 +10,7 @@ credentials = Aws::SharedCredentials.new(profile_name: 'ro')
 
 # Create ELB client
 elb = Aws::ElasticLoadBalancing::Client.new(credentials: credentials, region: 'us-east-1')
-elbname = "QA-Gadfly-mgr"
+elbname = "ELB-Name"
 
 # Describe ELB specified
 elbid = elb.describe_load_balancers(options = {:load_balancer_names => ["#{elbname}"]})
