@@ -8,7 +8,7 @@ def s3_get_objects
   # ssl_verify_peer = not good practice, but on Windows systems its a quick workaround until you can set your environment for a proper CA-bundle
   def awscredentials
    #Aws.config[:ssl_verify_peer] = false
-    @credentials = Aws::SharedCredentials.new(profile_name: 'default')
+    @credentials = Aws::SharedCredentials.new(profile_name: 'ro')
   end
 
   # Define Region

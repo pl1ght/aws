@@ -3,7 +3,7 @@
   require 'csv'
 
   # Set Creds as usual via $home/.aws/credentials - You aren't storing keys in code are you? :)
-  credentials = Aws::SharedCredentials.new(profile_name: 'changeme')
+  credentials = Aws::SharedCredentials.new(profile_name: 'ro')
 
   # Create IAM Client
   iam = Aws::IAM::Resource.new(credentials: credentials, region: 'us-east-1')
