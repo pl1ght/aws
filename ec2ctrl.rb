@@ -1,11 +1,28 @@
 require 'aws-sdk'
 
+# Grab AWS access/secret keys by profile from .aws/credentials file
+
+# Windows
+winuser = ENV['USERPROFILE']
+credentialfile = "#{winuser}/.aws/credentials"
+
+# Linux
+#nixuser = ENV['HOME']
+#credentialfile = "#{nixuser}/.aws/credentials"
+
+list_creds = File.open credentialfile do |file|
+  file.find_all { |line| line =~ /\[\w+\]/ }
+end
+
+puts list_creds
+puts "Select profile: "
+profile = gets.chomp
 
 puts "Enter AWS region: "
 region = gets.chomp
 
 # Credentials pulled via .aws/credentials file via profiles
-credentials = Aws::SharedCredentials.new(profile_name: 'changeme')
+credentials = Aws::SharedCredentials.new(profile_name: profile)
 
 # Create EC2 client
 @ec2stat = Aws::EC2::Client.new(credentials: credentials, region: "#{region}")
