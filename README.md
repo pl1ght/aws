@@ -12,3 +12,5 @@ iamcreate.rb - quick script that allows user to input how many IAM users request
 elbec2id.rb - pulls instance_id's, each instance_id's IP address, and the instance health for all instances registered with the specified ELB.
 
 elblist.rb - enumerates and lists all ELBs for a given profile in AWS 
+
+ec2ctrl.rb - specify a region and instance-id.  Will get status of instance power, or let you power on/off depending on command issues
