@@ -5,7 +5,7 @@ puts "Enter AWS region: "
 region = gets.chomp
 
 # Credentials pulled via .aws/credentials file via profiles
-credentials = Aws::SharedCredentials.new(profile_name: 'imagingdev')
+credentials = Aws::SharedCredentials.new(profile_name: 'changeme')
 
 # Create EC2 client
 @ec2stat = Aws::EC2::Client.new(credentials: credentials, region: "#{region}")
