@@ -1,7 +1,6 @@
 require 'aws-sdk'
 
 # Grab AWS access/secret keys by profile from .aws/credentials file
-
 # Windows
 winuser = ENV['USERPROFILE']
 credentialfile = "#{winuser}/.aws/credentials"
@@ -31,14 +30,12 @@ credentials = Aws::SharedCredentials.new(profile_name: profile)
 def start_instances()
   instance = @ec2ctrl.instance("#{@iid}")
   instance.start
-  instance.wait_until_running
-  puts instance.id + " has been started successfully"
+   puts instance.id + " has been started successfully"
 end
 
 def stop_instances()
   instance = @ec2ctrl.instance("#{@iid}")
   instance.stop
-  instance.wait_until_stopped
   puts instance.id + " has been stopped successfully"
 end
 
