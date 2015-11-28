@@ -30,12 +30,14 @@ credentials = Aws::SharedCredentials.new(profile_name: profile)
 def start_instances()
   instance = @ec2ctrl.instance("#{@iid}")
   instance.start
+  instance.wait_until_running
    puts instance.id + " has been started successfully"
 end
 
 def stop_instances()
   instance = @ec2ctrl.instance("#{@iid}")
   instance.stop
+  instance.wait_until_stopped
   puts instance.id + " has been stopped successfully"
 end
 
@@ -48,14 +50,13 @@ end
 def ctrl()
   puts "Enter Instance_ID: "
   @iid = gets.chomp
-  puts "status/start/stop instance: "
+  status_instance
+  puts "Start or stop instance? "
   @cmd = gets.chomp
-  if @cmd == "start"
+    if @cmd.downcase == "start"
     start_instances
-  elsif @cmd == "stop"
+  elsif @cmd.downcase == "stop"
     stop_instances
-  elsif @cmd == "status"
-    status_instance
   elsif defined?(@cmd)
     ctrl
   end
