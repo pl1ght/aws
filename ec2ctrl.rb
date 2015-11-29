@@ -1,33 +1,15 @@
 require 'aws-sdk'
+require_relative 'profile.rb'
 
-# Grab AWS access/secret keys by profile from .aws/credentials file
-# Windows
-winuser = ENV['USERPROFILE']
-credentialfile = "#{winuser}/.aws/credentials"
-
-# Linux/OSX
-#nixuser = ENV['HOME']
-#credentialfile = "#{nixuser}/.aws/credentials"
-
-list_creds = File.open credentialfile do |file|
-  file.find_all { |line| line =~ /\[\w+\]/ }
-end
-
-# List available profiles in local credentials file
-puts list_creds
-puts "Select profile: "
-profile = gets.chomp
-
-# Get AWS region
-puts "Enter AWS region: "
-region = gets.chomp
+# Call function from profile.rb to get account/region info
+awsprofile
 
 # Credentials pulled via .aws/credentials file via profiles
-credentials = Aws::SharedCredentials.new(profile_name: profile)
+credentials = Aws::SharedCredentials.new(profile_name: @profile)
 
 # Create EC2 client
-@ec2stat = Aws::EC2::Client.new(credentials: credentials, region: "#{region}")
-@ec2ctrl = Aws::EC2::Resource.new(credentials: credentials, region: "#{region}")
+@ec2stat = Aws::EC2::Client.new(credentials: credentials, region: "#{@region}")
+@ec2ctrl = Aws::EC2::Resource.new(credentials: credentials, region: "#{@region}")
 
 # Start instance method with wait on success
 def start_instances
