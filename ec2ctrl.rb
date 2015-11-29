@@ -5,7 +5,7 @@ require 'aws-sdk'
 winuser = ENV['USERPROFILE']
 credentialfile = "#{winuser}/.aws/credentials"
 
-# Linux
+# Linux/OSX
 #nixuser = ENV['HOME']
 #credentialfile = "#{nixuser}/.aws/credentials"
 
@@ -13,10 +13,12 @@ list_creds = File.open credentialfile do |file|
   file.find_all { |line| line =~ /\[\w+\]/ }
 end
 
+# List available profiles in local credentials file
 puts list_creds
 puts "Select profile: "
 profile = gets.chomp
 
+# Get AWS region
 puts "Enter AWS region: "
 region = gets.chomp
 
@@ -27,6 +29,7 @@ credentials = Aws::SharedCredentials.new(profile_name: profile)
 @ec2stat = Aws::EC2::Client.new(credentials: credentials, region: "#{region}")
 @ec2ctrl = Aws::EC2::Resource.new(credentials: credentials, region: "#{region}")
 
+# Start instance method with wait on success
 def start_instances
   instance = @ec2ctrl.instance("#{@iid}")
   instance.start
@@ -34,6 +37,7 @@ def start_instances
    puts instance.id + " has been started successfully"
 end
 
+# Stop instance method with wait on success
 def stop_instances
   instance = @ec2ctrl.instance("#{@iid}")
   instance.stop
@@ -41,12 +45,14 @@ def stop_instances
   puts instance.id + " has been stopped successfully"
 end
 
+# Instance Status method
 def status_instance
   instance = @ec2stat.describe_instance_status({instance_ids: [@iid], include_all_instances: true})
   puts "Instance #{@iid} is " + instance.instance_statuses[0].instance_state.name
   #ctrl
 end
 
+# User input/action method for control of instance start/stop
 def ctrl
   puts "Enter Instance_ID: "
   @iid = gets.chomp
@@ -62,6 +68,7 @@ def ctrl
   end
 end
 
+# Run it all with ctrl method
 ctrl
 
 
