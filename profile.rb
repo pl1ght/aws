@@ -1,6 +1,3 @@
-
-puts "included"
-
 def awsprofile
   # Grab AWS access/secret keys by profile from .aws/credentials file
   # Windows
