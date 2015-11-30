@@ -15,7 +15,7 @@
 
   # Init array for user/pass infos
   csvout = []
-
+  time = Time.now.to_i
   # While Loop to handle IAM user and random base64 password generation
   while count < maxcount do
     num = rand(10000)
@@ -26,7 +26,7 @@
     csvout << user + "," + password #+ "\n"
 
   # CSV File creation, creates file where script was run.  Did this for a "paper" copy
-  CSV.open("iamcreds.csv", "w") do |csv|
+  CSV.open("iamcreds-#{time}.csv", "w") do |csv|
     csvout.each do |x|
     csv << [x]
       end
