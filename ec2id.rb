@@ -1,31 +1,12 @@
 require 'aws-sdk'
 #Aws.use_bundled_cert!  #for systems that do not have latest/greatest CA bundle install/configured properly. Uncomment if needing workaround.
-require 'json'
+require_relative 'profile.rb'
 
+# Call function from profile.rb to get account/region info
+awsprofile
 
-# Grab AWS access/secret keys by profile from .aws/credentials file
-
-# Windows
-winuser = ENV['USERPROFILE']
-credentialfile = "#{winuser}/.aws/credentials"
-
-# Linux
-#nixuser = ENV['HOME']
-#credentialfile = "#{nixuser}/.aws/credentials"
-
-list_creds = File.open credentialfile do |file|
-  file.find_all { |line| line =~ /\[\w+\]/ }
-end
-
-puts list_creds
-puts "Select profile: "
-profile = gets.chomp
-
-puts "Specify Region: "
-region = gets.chomp
-
-credentials = Aws::SharedCredentials.new(profile_name: profile )
-client = Aws::EC2::Client.new(credentials: credentials, region: region )
+credentials = Aws::SharedCredentials.new(profile_name: @profile.downcase)
+client = Aws::EC2::Client.new(credentials: credentials, region: @region.downcase)
 
 resp = client.describe_instances
 

@@ -1,6 +1,6 @@
 # aws
 **aws-sdk ruby v2** 
-- Scripts that are from larger projects that I made into one off runnable single scripts for future reference, or others looking for ruby aws SDK v2 info
+- Scripts that are from larger ChatOps projects, lita.io bot specifically, that I made into one off runnable single scripts for future reference, or others looking for ruby aws SDK v2 info
 
 
 **s3auth.rb** - just does an authenticate and s3 bucket list per user input region, then list contents of bucket specified

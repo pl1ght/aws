@@ -1,6 +1,4 @@
   require 'aws-sdk'
-  require 'json'
-
 
 
   # Credentials pulled via .aws/credentials file via profiles
