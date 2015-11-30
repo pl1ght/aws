@@ -14,3 +14,5 @@
 **elblist.rb** - enumerates and lists all ELBs for a given profile in AWS 
 
 **ec2ctrl.rb** - specify a region and instance-id.  Will get status of instance power, or let you power on/off depending on command issues
+
+**profile.rb** - function to grab region/credential profile specs to feed scripts.  

@@ -8,8 +8,8 @@ awsprofile
 credentials = Aws::SharedCredentials.new(profile_name: @profile)
 
 # Create EC2 client
-@ec2stat = Aws::EC2::Client.new(credentials: credentials, region: "#{@region}")
-@ec2ctrl = Aws::EC2::Resource.new(credentials: credentials, region: "#{@region}")
+@ec2stat = Aws::EC2::Client.new(credentials: credentials, region: "#{@region}".downcase)
+@ec2ctrl = Aws::EC2::Resource.new(credentials: credentials, region: "#{@region}".downcase)
 
 # Start instance method with wait on success
 def start_instances
