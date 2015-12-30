@@ -6,9 +6,10 @@ require_relative 'profile.rb'
 awsprofile
 
 credentials = Aws::SharedCredentials.new(profile_name: @profile.downcase)
-client = Aws::EC2::Client.new(credentials: credentials, region: @region.downcase)
+@client = Aws::EC2::Client.new(credentials: credentials, region: @region.downcase)
 
-resp = client.describe_volumes({ filters:[{name: "status", values: ["available"]}]})
+resp = @client.describe_volumes({ filters:[{name: "status", values: ["available"]}]})
+
 
 @ebsvol = resp.volumes.map
 @ebsavailable = []
@@ -20,5 +21,11 @@ def ebs_available
   end
 end
 
+def ebs_delete
+  for i in  @ebsavailable
+    @client.delete_volume({dry_run: true, volume_id: "#{i}",})
+  end
+end
+
 ebs_available
-puts @ebsavailable
+ebs_delete
