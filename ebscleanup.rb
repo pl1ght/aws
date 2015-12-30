@@ -14,9 +14,11 @@ resp = client.describe_volumes({ filters:[{name: "status", values: ["available"]
 @ebsavailable = []
 
 
-for i in @ebsvol do
-  @ebsavailable << i.volume_id
+def ebs_available
+  for i in @ebsvol do
+    @ebsavailable << i.volume_id
+  end
 end
-@count = @ebsavailable.count
-puts "#{@count} currently unused volumes in #{@region} #{@profile}"
+
+ebs_available
 puts @ebsavailable
