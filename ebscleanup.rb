@@ -22,7 +22,7 @@ def ebs_available
 end
 
 def ebs_delete
-  for i in  @ebsavailable
+  for i in @ebsavailable
     @client.delete_volume({dry_run: true, volume_id: "#{i}",})
   end
 end
