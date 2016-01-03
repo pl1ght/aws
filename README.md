@@ -15,4 +15,8 @@
 
 **ec2ctrl.rb** - specify a region and instance-id.  Will get status of instance power, or let you power on/off depending on command issues
 
-**profile.rb** - function to grab region/credential profile specs to feed scripts.  
+**profile.rb** - function to grab region/credential profile specs to feed scripts.
+
+**ebscleanup.rb** - right now its querying for all EBS volumes in available status to be a candidate for deletion
+
+**cloudatch.rb** - querying based on volumeID of an EBS volume whether or not an available volume has been unused for a set amount of time
