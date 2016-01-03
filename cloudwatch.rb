@@ -34,7 +34,7 @@ def ebs_candidate(volume_id)
   if metrics.length
     for metric in metrics
       if metric['minimum']
-        return True
+        print "True"
       else
         print "False"
       end
