@@ -27,7 +27,7 @@ resp = @client.describe_volumes({ filters:[{name: "status", values: ["available"
 @notcandidate = []
 
 # Setup Logging
-@log = Logger.new('ebsdel.log','weekly')
+@log = Logger.new('ebscleanup.log','weekly')
 
 # Find our EBS Volumes in available status
 def ebs_available
@@ -117,8 +117,8 @@ case ARGV[0]
 Please provide command option
 
 Usage:
-  ebsdel.rb dry-run **outputs EBS candidates for deletion to ebsdel.log**
-  ebsdel.rb run **deletes all valid EBS candidates and logs to ebsdel.log**
+  ebscleanup.rb dry-run **outputs EBS candidates for deletion to ebscleanup.log**
+  ebscleanup.rb run **deletes all valid EBS candidates and logs to ebscleanup.log**
 EOF
 end
 
