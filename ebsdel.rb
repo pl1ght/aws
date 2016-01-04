@@ -79,7 +79,7 @@ def get_candidate
   end
 end
 
-# Log and delete candidate volumes - note dry_run: false.  Set to true if you want to actually dry run. false will delete.
+# Log and delete candidate volumes - note dry_run: false.  Set to true if you want to actually dry run. false WILL *delete*.
 def ebs_delete
   for i in @candidates
     @client.delete_volume({dry_run: false, volume_id: i,})
