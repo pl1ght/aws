@@ -3,9 +3,9 @@
 require 'aws-sdk'
 require 'logger'
 
-
+@profile = "ro"
 # Shared credentials and Cloudwatch client
-credentials = Aws::SharedCredentials.new(profile_name: 'imagingdev')
+credentials = Aws::SharedCredentials.new(profile_name: @profile)
 
 # EBS Client
 @client = Aws::EC2::Client.new(credentials: credentials, region: 'us-east-1')
@@ -27,7 +27,7 @@ resp = @client.describe_volumes({ filters:[{name: "status", values: ["available"
 @notcandidate = []
 
 # Setup Logging
-@log = Logger.new('ebslog.log','weekly')
+@log = Logger.new('ebsdel.log','weekly')
 
 # Find our EBS Volumes in available status
 def ebs_available
@@ -71,28 +71,53 @@ def ebs_candidate(volume_id)
   end
 end
 
-# Get available EBS volumes for candidate
-ebs_available
-for i in @volume_id
-  ebs_metrics(i)
-  ebs_candidate(i)
+# Get candidates for deletion
+def get_candidate
+  for i in @volume_id
+    ebs_metrics(i)
+    ebs_candidate(i)
+  end
 end
 
 # Log and delete candidate volumes - note dry_run: false.  Set to true if you want to actually dry run. false will delete.
 def ebs_delete
   for i in @candidates
     @client.delete_volume({dry_run: false, volume_id: i,})
-    @log.info "deleting #{i}"
+    @log.info "Account #{@profile} - deleting #{i}"
   end
 end
 
+def ebs_delete_dry
+  for i in @candidates
+    @log.info "Account #{@profile} - Found candidate #{i}"
+  end
+end
 # Logging non-candidate for awareness
 def ebs_notcandidate
   for i in @notcandidate
-    @log.info "Volume #{i} has recently been in use, skipping..."
+    @log.info "Account #{@profile} - Volume #{i} has recently been in use, skipping..."
   end
 end
 
-# Execute deletion and logging
-ebs_delete
-ebs_notcandidate
+# Get available EBS volumes for candidate
+case ARGV[0]
+  when "dry-run"
+    ebs_available
+    get_candidate
+    ebs_delete_dry
+    ebs_notcandidate
+  when "run"
+    ebs_available
+    get_candidate
+    ebs_delete
+    ebs_notcandidate
+  else
+    STDOUT.puts <<-EOF
+Please provide command option
+
+Usage:
+  ebsdel.rb dry-run "outputs EBS candidates for deletion to ebsdel.log"
+  ebsdel.rb run "deletes all valid EBS candidates and logs to ebsdel.log"
+    EOF
+end
+
