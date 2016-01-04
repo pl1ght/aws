@@ -116,8 +116,8 @@ case ARGV[0]
 Please provide command option
 
 Usage:
-  ebsdel.rb dry-run "outputs EBS candidates for deletion to ebsdel.log"
-  ebsdel.rb run "deletes all valid EBS candidates and logs to ebsdel.log"
-    EOF
+  ebsdel.rb dry-run **outputs EBS candidates for deletion to ebsdel.log**
+  ebsdel.rb run **deletes all valid EBS candidates and logs to ebsdel.log**
+EOF
 end
 
