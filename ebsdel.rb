@@ -89,7 +89,7 @@ end
 
 def ebs_delete_dry
   for i in @candidates
-    @log.info "Account #{@profile} - Found candidate #{i}"
+    @log.info "--DRY RUN-- Account #{@profile} - Found candidate #{i}"
   end
 end
 # Logging non-candidate for awareness
