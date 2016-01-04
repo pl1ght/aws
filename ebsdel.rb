@@ -99,7 +99,7 @@ def ebs_notcandidate
   end
 end
 
-# Get available EBS volumes for candidate
+# Do the things and command-line the tool
 case ARGV[0]
   when "dry-run"
     ebs_available
