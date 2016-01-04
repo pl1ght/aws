@@ -17,6 +17,4 @@
 
 **profile.rb** - function to grab region/credential profile specs to feed scripts.
 
-**ebscleanup.rb** - right now its querying for all EBS volumes in available status to be a candidate for deletion
-
-**cloudatch.rb** - querying based on volumeID of an EBS volume whether or not an available volume has been unused for a set amount of time
+**ebsdel.rb** - Script that queries all available EBS volumes in an AWS account, cross checks each volume_id with CloudWatch metrics to see if it is a good candidate for deletion, and deletes if it is.  Has command-line functionality and ability to dry-run to log what would be deleted.
