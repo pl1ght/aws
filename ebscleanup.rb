@@ -31,7 +31,7 @@ resp = @client.describe_volumes({ filters:[{name: "status", values: ["available"
 
 # Find our EBS Volumes in available status
 def ebs_available
-  for i in @ebsvol do
+  @ebsvol.each do |i|
     @volume_id.push(i.volume_id)
   end
 end
@@ -60,7 +60,7 @@ end
 def ebs_candidate(volume_id)
   metrics = ebs_metrics(volume_id)
   if metrics.length
-    for metric in metrics
+    metrics.each do |metric|
       if metric['minimum']
         @notcandidate.push(volume_id)
       end
@@ -73,7 +73,7 @@ end
 
 # Get candidates for deletion
 def get_candidate
-  for i in @volume_id
+  @volume_id.each do |i|
     ebs_metrics(i)
     ebs_candidate(i)
   end
@@ -81,21 +81,21 @@ end
 
 # Log and delete candidate volumes - note dry_run: false.  Set to true if you want to actually dry run. false WILL *delete*.
 def ebs_delete
-  for i in @candidates
+  @candidates.each do |i|
     @client.delete_volume({dry_run: false, volume_id: i,})
     @log.info "Account #{@profile} - deleting #{i}"
   end
 end
 
 def ebs_delete_dry
-  for i in @candidates
+  @candidates.each do |i|
     @log.info "--DRY RUN-- Account #{@profile} - Found candidate #{i}"
   end
 end
 
 # Logging non-candidate for awareness
 def ebs_notcandidate
-  for i in @notcandidate
+  @notcandidate.uniq.each do |i|
     @log.info "Account #{@profile} - Volume #{i} has recently been in use, skipping..."
   end
 end
