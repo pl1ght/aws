@@ -93,7 +93,7 @@ def ebs_delete_dry
   end
 end
 
-# Logging non-candidate for awareness
+# Logging non-candidate for awareness. Since I am being dumb about potentially returning True multiple times for cloudwatch metrics, added .uniq to array so it only prints one volume_id per loop.
 def ebs_notcandidate
   @notcandidate.uniq.each do |i|
     @log.info "Account #{@profile} - Volume #{i} has recently been in use, skipping..."
