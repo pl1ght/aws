@@ -3,7 +3,7 @@
 require 'aws-sdk'
 require 'logger'
 
-@profile = "ro"
+@profile = 'ro'
 # Shared credentials and Cloudwatch client
 credentials = Aws::SharedCredentials.new(profile_name: @profile)
 
@@ -11,7 +11,7 @@ credentials = Aws::SharedCredentials.new(profile_name: @profile)
 @client = Aws::EC2::Client.new(credentials: credentials, region: 'us-east-1')
 
 # Populate EBS volumes in available state
-resp = @client.describe_volumes({ filters:[{name: "status", values: ["available"]}]})
+resp = @client.describe_volumes({ filters:[{name: 'status', values: ['available']}]})
 @ebsvol = resp.volumes.map
 
 # Cloudwatch client
@@ -39,19 +39,19 @@ end
 # Cloudwatch metric to pull minimum Idle time for EBS volumes to see which volumes are not used.
 def ebs_metrics(volume_id)
   resp =  @cloudwatch.get_metric_statistics({
-     namespace: "AWS/EBS",
-      metric_name: "VolumeIdleTime",
+     namespace: 'AWS/EBS',
+      metric_name: 'VolumeIdleTime',
       dimensions: [
           {
-              name: "VolumeId",
+              name: 'VolumeId',
               value: volume_id,
           },
       ],
       start_time: @startdate,
       end_time: @enddate,
       period: 3600,
-      statistics: ["Minimum"],
-      unit: "Seconds"
+      statistics: ['Minimum'],
+      unit: 'Seconds'
   })
   resp.datapoints
 end
@@ -102,12 +102,12 @@ end
 
 # Do the things and command-line the tool
 case ARGV[0]
-  when "dry-run"
+  when 'dry-run'
     ebs_available
     get_candidate
     ebs_delete_dry
     ebs_notcandidate
-  when "run"
+  when 'run'
     ebs_available
     get_candidate
     ebs_delete
