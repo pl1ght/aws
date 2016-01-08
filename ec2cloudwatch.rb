@@ -1,10 +1,11 @@
 require 'aws-sdk'
 require 'logger'
-
+require 'json'
 @profile = "ro"
 @stopped_instances = []
 @candidates = []
 @notcandidate = []
+@info = []
 
 # Shared credentials and EC2 client
 credentials = Aws::SharedCredentials.new(profile_name: @profile)
@@ -61,15 +62,36 @@ def ec2_candidate(ec2_id)
     @candidates.push(ec2_id)
   end
 end
+
+
+
 get_instances
 
 @stopped_instances.each do |i|
   ec2_candidate(i)
 end
 
-#@stopped_instances.each do |i|
-#  @candidates.push(get_ec2_metrics(i))
-#end
+#get_candidate_info
 p @stopped_instances.count
 p @candidates.count
 p @notcandidate.uniq.count
+
+
+def get_candidate_tags
+  @candidates.each do |iid|
+  @respiid = @client.describe_instances({instance_ids: [iid],})
+    @resp.reservations.each do |i|
+      @info.push(i.instances[0].tags[:name])
+    end
+  end
+end
+
+get_candidate_tags
+
+
+#info_hash = Hash[@info.each_with_index.map { |value, index| [index, value] }]
+
+#serialized = JSON.generate(info_hash)
+#new_hash = JSON.parse(serialized, {:symbolize_names => true})
+#p new_hash["Name"]
+
