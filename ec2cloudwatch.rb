@@ -1,7 +1,10 @@
 require 'aws-sdk'
 require 'logger'
 require 'json'
-@profile = "ro"
+
+@profile = "imagingdev"
+
+# Array Init
 @stopped_instances = []
 @candidates = []
 @notcandidate = []
@@ -12,10 +15,11 @@ credentials = Aws::SharedCredentials.new(profile_name: @profile)
 @client = Aws::EC2::Client.new(credentials: credentials, region: 'us-east-1')
 @cloudwatch = Aws::CloudWatch::Client.new(credentials: credentials, region: 'us-east-1')
 
-# Date variables I am using 14 days/2 weeks to look back for Cloudwatch metrics
-@startdate = (DateTime.now - 14).iso8601
+# Date variables I am using 30 days to look back for Cloudwatch metrics
+@startdate = (DateTime.now - 30).iso8601
 @enddate = DateTime.now.iso8601
 
+# Aws Client looking for only stopped instances
 @resp = @client.describe_instances({
                                        filters: [
                                            {
@@ -24,12 +28,16 @@ credentials = Aws::SharedCredentials.new(profile_name: @profile)
                                            }
                                        ]
                                    })
+
+# Fill up our stopped_instances array with all found in account
 def get_instances
   @resp.reservations.each do |i|
     @stopped_instances.push(i.instances[0][:instance_id])
   end
 end
 
+
+# Look for CPUutilization metrics
 def get_ec2_metrics(ec2_id)
   resp =  @cloudwatch.get_metric_statistics({
                                                 namespace: "AWS/EC2",
@@ -49,6 +57,7 @@ def get_ec2_metrics(ec2_id)
   resp.datapoints
 end
 
+# Check to see if any stopped instances are candidates for deletion based on any CPU activity in last 30 days
 def ec2_candidate(ec2_id)
   metrics = get_ec2_metrics(ec2_id)
   if metrics.length
@@ -64,34 +73,34 @@ def ec2_candidate(ec2_id)
 end
 
 
+# We may want more info on the instances initially to cross check our stopped instances with others before deletion.
+def get_candidate_tags
+  @candidates.each do |iid|
+    itag = @client.describe_tags(filters: [{name: "resource-id", values: [iid]},{name: "key", values: ["Name"]}])
+    @info.push(itag)
+  end
+end
 
+# Get the instances that are stopped
 get_instances
 
+# Loop through each instance thats stopped and run against cloudwatch for CPU Metrics
 @stopped_instances.each do |i|
   ec2_candidate(i)
 end
 
-#get_candidate_info
+# Get dat tag from instances
+get_candidate_tags
+
+# I print these values so I can make sure the math is right. For Debugging purposes
 p @stopped_instances.count
 p @candidates.count
 p @notcandidate.uniq.count
 
-
-def get_candidate_tags
-  @candidates.each do |iid|
-  @respiid = @client.describe_instances({instance_ids: [iid],})
-    @resp.reservations.each do |i|
-      @info.push(i.instances[0].tags[:name])
-    end
-  end
+# Dump out the instanceID and tags in json format
+@info.each do |i|
+  a = i.to_h
+  puts JSON.pretty_generate(a[:tags])
 end
 
-get_candidate_tags
-
-
-#info_hash = Hash[@info.each_with_index.map { |value, index| [index, value] }]
-
-#serialized = JSON.generate(info_hash)
-#new_hash = JSON.parse(serialized, {:symbolize_names => true})
-#p new_hash["Name"]
 
