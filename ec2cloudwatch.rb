@@ -2,6 +2,7 @@ require 'aws-sdk'
 require 'logger'
 require 'json'
 
+@log = Logger.new('ec2cleanup.log','weekly')
 @profile = "imagingdev"
 
 # Array Init
@@ -100,7 +101,15 @@ p @notcandidate.uniq.count
 # Dump out the instanceID and tags in json format
 @info.each do |i|
   a = i.to_h
-  puts JSON.pretty_generate(a[:tags])
+  @log.info(JSON.pretty_generate(a[:tags]))
 end
 
 
+# Terminate instances and log
+@candidates.each do |del|
+  @client.terminate_instances({
+      dry_run: false,
+      instance_ids: [del],
+                              })
+  @log.info "Deleted #{del}"
+end
