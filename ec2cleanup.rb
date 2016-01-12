@@ -3,7 +3,7 @@ require 'logger'
 require 'json'
 
 @log = Logger.new('ec2cleanup.log','weekly')
-@profile = "imagingdev"
+@profile = "profilename"
 
 # Array Init
 @stopped_instances = []
@@ -105,11 +105,17 @@ p @notcandidate.uniq.count
 end
 
 
-# Terminate instances and log
+# Terminate instances and log with error handling around Termination protection
 @candidates.each do |del|
-  @client.terminate_instances({
-      dry_run: false,
-      instance_ids: [del],
-                              })
-  @log.info "Deleted #{del}"
+  begin
+    @client.terminate_instances({
+          dry_run: false,
+          instance_ids: [del],
+                                })
+    @log.info "Deleted #{del}"
+  rescue Aws::EC2::Errors::ServiceError => e
+    @log.warn e.message
+    puts "#{del} can't be deleted, please check logfile for more information"
+  next
+  end
 end
