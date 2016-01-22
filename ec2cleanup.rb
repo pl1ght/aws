@@ -96,10 +96,8 @@ end
 
 
 
-# I print these values so I can make sure the math is right. For Debugging purposes
-#p @stopped_instances.count
-#p @candidates.count
-#p @notcandidate.uniq.count
+
+
 
 # Dump out the instanceID and tags in json format
 def log_instances
@@ -133,6 +131,10 @@ case ARGV[0]
     inst_cloudwatch
     get_candidate_tags
     log_instances
+    # Print out total stopped found and how many are candidates and the difference to verify math is as expected.
+    p @stopped_instances.count
+    p @candidates.count
+    p @notcandidate.uniq.count
   when 'run'
     get_instances
     inst_cloudwatch
