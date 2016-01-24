@@ -18,3 +18,5 @@
 **profile.rb** - function to grab region/credential profile specs to feed scripts.
 
 **ebscleanup.rb** - Script that queries all available EBS volumes in an AWS account, cross checks each volume_id with CloudWatch metrics to see if it is a good candidate for deletion, and deletes if it is.  Has command-line functionality and ability to dry-run to log what would be deleted.
+
+**ec2cleanup.rb** - CMD-Line Script that queries all stopped EC2 instances for an AWS account, cross checks the instance with CloudWatch for CPUusage in past 60 days(configurable), and puts it as a candidate for deletion if user wish to terminate.  Dry run also just ouputs candidates to logfile

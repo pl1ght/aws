@@ -41,7 +41,6 @@ def get_instances
   end
 end
 
-
 # Look for CPUutilization metrics over specified timeframe
 def get_ec2_metrics(ec2_id)
   resp =  @cloudwatch.get_metric_statistics({
@@ -77,7 +76,6 @@ def ec2_candidate(ec2_id)
   end
 end
 
-
 # Getting Tags for stopped instances- We may want more info on the instances initially to cross check our stopped instances with others before deletion.
 def get_candidate_tags
   @candidates.each do |iid|
@@ -92,12 +90,6 @@ def inst_cloudwatch
    ec2_candidate(i)
 end
 end
-
-
-
-
-
-
 
 # Dump out the instanceID and tags in json format
 def log_instances
@@ -132,9 +124,9 @@ case ARGV[0]
     get_candidate_tags
     log_instances
     # Print out total stopped found and how many are candidates and the difference to verify math is as expected.
-    p @stopped_instances.count
-    p @candidates.count
-    p @notcandidate.uniq.count
+    puts "Total stopped instances: #{@stopped_instances.count}"
+    puts "Total candidates for deletion: #{@candidates.count}"
+    puts "Total instances NOT candidates for deletion: #{@notcandidate.uniq.count}"
   when 'run'
     get_instances
     inst_cloudwatch
