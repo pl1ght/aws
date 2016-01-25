@@ -7,7 +7,7 @@ require 'json'
 @log_candidate = Logger.new('ec2candidates.log','weekly')
 
 # shared profile account
-@profile = "profilename"
+@profile = "default"
 
 # Array Init
 @stopped_instances = []
@@ -107,6 +107,7 @@ def term_instances
             dry_run: false,
             instance_ids: [del],
                                 })
+      puts "Deleting instance #{del}"
       @log.info "Deleted #{del}"
     rescue Aws::EC2::Errors::ServiceError => e
       @log.warn e.message
