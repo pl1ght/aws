@@ -7,7 +7,7 @@ require 'json'
 @log_candidate = Logger.new('ec2candidates.log','weekly')
 
 # shared profile account
-@profile = "default"
+@profile = "profilename"
 
 # Array Init
 @stopped_instances = []
